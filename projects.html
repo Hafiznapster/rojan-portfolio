@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>All Projects | Rojan Castro</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    /* Shared CSS from main page */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --bg: #05050A;
+      --surface: #0e0e16;
+      --surface2: #161622;
+      --accent: #8b78fa;
+      --accent2: #b3a1fa;
+      --text: #f8f7ff;
+      --muted: #9999aa;
+      --border: rgba(139, 120, 250, 0.15);
+      --card-bg: #0d0d14;
+      --glow: rgba(139, 120, 250, 0.4);
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: transparent;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid transparent;
+    }
+
+    nav.scrolled {
+      background: rgba(5, 5, 10, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 3rem;
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--text);
+      letter-spacing: .05em
+    }
+
+    .nav-logo a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .nav-logo span {
+      color: var(--accent)
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: .9rem;
+      text-decoration: none;
+      transition: color .2s;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      color: var(--text)
+    }
+
+    /* Utility */
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2.5rem
+    }
+
+    section {
+      padding: 7rem 0
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      max-width: 1100px;
+      margin: 0 auto
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .75rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 1rem
+    }
+
+    .section-label::before {
+      content: "";
+      display: block;
+      width: 30px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 3rem;
+      letter-spacing: -0.02em;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: .8rem 2rem;
+      border-radius: 12px;
+      font-size: .95rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all .3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #6a55e0);
+      color: #fff;
+      border: none;
+      box-shadow: 0 8px 20px rgba(106, 85, 224, 0.25);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(106, 85, 224, 0.35);
+    }
+
+    .btn-outline {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      background: var(--surface);
+      transform: translateY(-2px);
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 20px rgba(139, 120, 250, 0.15);
+    }
+
+    .project-video {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--surface2);
+      position: relative;
+    }
+
+    .project-video iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .video-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      color: var(--muted);
+      background: linear-gradient(135deg, #13131e 0%, #1a1a26 100%);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .play-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(139, 120, 250, .15);
+      border: 1px solid rgba(139, 120, 250, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+
+    .project-card:hover .play-icon {
+      transform: scale(1.1);
+      background: var(--accent);
+    }
+
+    .project-card:hover .play-icon svg polygon {
+      fill: #fff;
+    }
+
+    .project-body {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .project-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 1.2rem
+    }
+
+    .project-tag {
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: .75rem;
+      font-weight: 600;
+      background: rgba(139, 120, 250, .1);
+      color: var(--accent2);
+    }
+
+    .project-body h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1rem
+    }
+
+    .project-body p {
+      color: var(--muted);
+      font-size: .95rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem
+    }
+
+    .project-bullets {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 1.5rem
+    }
+
+    .project-bullets li {
+      font-size: .9rem;
+      color: var(--muted);
+      line-height: 1.6;
+      padding-left: 1.2rem;
+      position: relative;
+      margin-bottom: .4rem
+    }
+
+    .project-bullets li::before {
+      content: "▹";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .project-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 1.5rem;
+      margin-top: auto;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      transition: all .2s;
+    }
+
+    .project-link:hover {
+      color: var(--accent2);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem;
+      color: var(--muted);
+      font-size: .85rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav id="navbar">
+    <div class="nav-logo"><a href="index.html">ROJAN<span>.</span>CASTRO</a></div>
+    <div class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#projects">Featured Projects</a>
+      <a href="projects.html" style="color:var(--text)">All Projects</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </nav>
+
+  <div style="height: 100px;"></div>
+
+  <section id="all-projects" style="padding-top: 3rem; min-height: calc(100vh - 100px - 85px);">
+    <div class="wrap">
+      <div class="section-label">Archive</div>
+      <div class="section-title">All My Projects</div>
+      <p style="color:var(--muted);font-size:1.05rem;margin-bottom:3rem;max-width:600px;">A complete showcase of all the
+        games I've designed and developed.</p>
+
+      <div id="project-list" class="projects-grid"></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Rojan R Castro · Game Developer · Trivandrum, Kerala © 2025</p>
+  </footer>
+
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+    const GH = "https://github.com/RojanRCastro";
+    // All projects for the dedicated page
+    const allProjects = [
+      {
+        title: "Knife Throw — Multiplayer PvP",
+        tags: ["Unity", "Photon Realtime", "C#", "Multiplayer"],
+        desc: "A competitive real-time multiplayer knife-throwing game.",
+        bullets: [
+          "Rebuilt single-player mechanic into real-time PvP using Photon",
+          "Synced knife spawning, collisions, hit detection, and log rotation across players",
+          "Designed UI animations, match start flow, and player profile system"
+        ],
+        videoUrl: "media/knife throw.mp4", github: GH
+      },
+      {
+        title: "Mini NBA",
+        tags: ["Unity", "ProBuilder", "C#", "Casual"],
+        desc: "A fun, casual endless basketball scoring game.",
+        bullets: [
+          "Implemented character controls, shooting mechanics, and spawn logic",
+          "Designed score system, difficulty scaling, and camera movement",
+          "Added smooth feel using easing and animation events"
+        ],
+        videoUrl: "media/mini nba.mp4", github: GH
+      },
+      {
+        title: "Rush — 3D Racing",
+        tags: ["Unity", "C#", "3D", "Racing", "AI"],
+        desc: "A 3D racing game with AI opponents and drift mechanics.",
+        bullets: [
+          "Built AI path-following system using waypoints",
+          "Implemented car physics, drift handling, and timer mode",
+          "Created multiple playable cars using ScriptableObjects"
+        ],
+        videoUrl: "media/rush.mp4", github: GH
+      },
+      {
+        title: "Theft N Drift",
+        tags: ["Unity", "ProBuilder", "C#", "Mobile"],
+        desc: "A car survival and drifting game with police AI chase.",
+        bullets: [
+          "Implemented police AI chase and avoidance logic",
+          "Designed level hazards and procedural enemy behavior",
+          "Optimized performance and physics for mobile platforms"
+        ],
+        videoUrl: "media/theft n drift.mp4", github: GH
+      },
+      {
+        title: "Escape From Dungeon",
+        tags: ["Unreal Engine", "C++", "Puzzle", "Adventure"],
+        desc: "A puzzle-based adventure prototype built in Unreal Engine.",
+        bullets: [
+          "Built puzzle triggers, traps, and door mechanisms in C++",
+          "Implemented basic AI and level interaction systems"
+        ],
+        videoUrl: "", imageUrl: "media/escape_from_dungeon.png", github: GH
+      },
+      {
+        title: "Runner",
+        tags: ["Android", "Casual", "Endless Runner"],
+        desc: "Runner is a casual android game with easy controls. This is an endless runner game by controlling the playable character and avoiding the obstacles in front of the Player and try to be alive to score a high score.",
+        bullets: [
+          "If the player touches the obstacle the game will be over.",
+          "Endless procedural level generation."
+        ],
+        videoUrl: "media/runner.mp4", github: GH
+      },
+      {
+        title: "Johnny Bravo",
+        tags: ["Orthographic", "Pixel Art", "Puzzle"],
+        desc: "JOHNNY BRAVO is a simple orthographic pixelated game where there is a player trying to collect the gem for that he has to overcome many Obstacles and find the way to reach the gem.",
+        bullets: [],
+        videoUrl: "media/johnny bravo.mp4", github: GH
+      },
+      {
+        title: "Space War",
+        tags: ["Space", "Endless", "Action"],
+        desc: "Space War is an endless space travelling game. The player have to dodge or destroy the space rocks and cover as much distance you want.",
+        bullets: [
+          "Player is provided with gun attached to the spaceship for destroying the space rocks.",
+          "Player can also can “SLOW DOWN TIME” if it is necessary."
+        ],
+        videoUrl: "media/space war.mkv", github: GH
+      },
+      {
+        title: "Escape Tank",
+        tags: ["Survival", "Action"],
+        desc: "This is a survival game where the player is a tank, in which the tank needs to survive till the given period of time where the enemy tank will attack the player.",
+        bullets: [],
+        videoUrl: "media/18 - Escape Tank.mp4", github: GH
+      },
+      {
+        title: "Platformer",
+        tags: ["Unreal Engine", "Physics", "Puzzle"],
+        desc: "Platformer is a physics-based puzzle game built in Unreal Engine, where players must skillfully navigate a series of dynamic, moving obstacles. The goal is to reach the safety of the house without falling off the map or losing balance along the way.",
+        bullets: [],
+        videoUrl: "media/platformer.mp4", github: GH
+      }
+    ];
+
+    function renderProjects() {
+      const c = document.getElementById('project-list');
+      if (!c) return;
+      c.innerHTML = '';
+      allProjects.forEach((p, index) => {
+        const card = document.createElement('div');
+        card.className = 'project-card';
+        card.innerHTML = `
+      <div class="project-video">
+        ${p.videoUrl
+            ? `<video src="${p.videoUrl}" loop muted playsinline style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0;"></video>`
+            : p.imageUrl 
+              ? `<img src="${p.imageUrl}" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0;" alt="${p.title}">`
+              : `<div class="video-placeholder">
+              <span style="font-weight:600; font-size:1.1rem; color:var(--text);">${p.title}</span>
+              <span style="font-size:.8rem;opacity:.6">Media coming soon</span>
+            </div>`}
+      </div>
+      <div class="project-body">
+        <div class="project-tags">${p.tags.map(t => `<span class="project-tag">${t}</span>`).join('')}</div>
+        <h3>${p.title}</h3>
+        <p>${p.desc}</p>
+        ${p.bullets && p.bullets.length > 0 ? `<ul class="project-bullets">${p.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
+        
+        <div class="project-footer">
+          <a href="#" onclick="return false;" class="project-link" style="cursor: default;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.58v-2.03c-3.34.73-4.04-1.6-4.04-1.6-.54-1.4-1.33-1.77-1.33-1.77-1.09-.74.08-.73.08-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.28-1.23 3.28-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            View Code
+          </a>
+        </div>
+      </div>`;
+        c.appendChild(card);
+      });
+      
+      // Optimize video playback
+      const videos = document.querySelectorAll('.project-video video');
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.play().catch(() => {});
+            } else {
+              entry.target.pause();
+            }
+          });
+        }, { threshold: 0.1 });
+        
+        videos.forEach(video => observer.observe(video));
+      } else {
+        videos.forEach(video => video.play().catch(() => {}));
+      }
+    }
+
+    renderProjects();
+  </script>
+</body>
+
+</html>
